@@ -95,16 +95,6 @@ def mandi_trend(mandi_name: str = "Nashik Mandi"):
     df = pd.read_sql(query, engine)
 
     return df.to_dict(orient="records")
-@app.get("/api/nearest-mandi")
-def nearest_mandi():
-    query = """
-        SELECT *
-        FROM mandi_prices
-        ORDER BY modal_price DESC
-        LIMIT 1
-    """
-    df = pd.read_sql(query, engine)
-    return df.to_dict(orient="records")[0]
 
 
 @app.get("/api/mandi-trend")
@@ -119,6 +109,7 @@ def mandi_trend(mandi_name: str):
     df = pd.read_sql(query, engine)
     df = df.sort_values("price_date")
     return df.to_dict(orient="records")
+WEATHER_API_KEY = "c6463f12cb68d0f60144269e67e7b65e"
 @app.get("/api/weather")
 def weather(lat: float, lon: float):
     import requests

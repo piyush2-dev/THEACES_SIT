@@ -761,9 +761,10 @@ async function generateAI(){
         const lon = selectedLocation.split(",")[1];
 
         const weatherRes = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=YOUR_API_KEY&units=metric`
-        );
-        const weatherData = await weatherRes.json();
+  `http://127.0.0.1:8000/api/weather?lat=${lat}&lon=${lon}`
+);
+
+const weatherData = await weatherRes.json();
 
         const temperature = weatherData.main.temp;
         const humidity = weatherData.main.humidity;
@@ -857,130 +858,6 @@ map.on('click', async function(e){
     await loadWeather(lat, lon);
 });
 
-
-// ---------------- AI FUNCTION ----------------
-async function generateAI(){
-
-    if(selectedLocation==="Not Selected"){
-        alert("Please select farm location on map");
-        return;
-    }
-
-    const crop = document.getElementById("crop").value;
-
-    try{
-
-        const mandiRes = await fetch("http://127.0.0.1:8000/api/nearest-mandi");
-        const mandiData = await mandiRes.json();
-
-        const trendRes = await fetch(
-          `http://127.0.0.1:8000/api/mandi-trend?mandi_name=${encodeURIComponent(mandiData.mandi_name)}`
-        );
-        const trendData = await trendRes.json();
-
-        const currentPrice = mandiData.modal_price;
-
-        let priceChange = 0;
-        if(trendData.length >= 2){
-            priceChange =
-              trendData[trendData.length-1].modal_price -
-              trendData[trendData.length-2].modal_price;
-        }
-
-        const WEATHER_API_KEY = "c6463f12cb68d0f60144269e67e7b65e";
-        const [lat,lon] = selectedLocation.split(",");
-
-        const weatherRes = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=YOUR_API_KEY&units=metric`
-        );
-
-        const weatherData = await weatherRes.json();
-        const temperature = weatherData.main.temp;
-        const humidity = weatherData.main.humidity;
-
-        let harvestAdvice;
-
-        if(priceChange > 0 && humidity < 70){
-            harvestAdvice = "Harvest Immediately";
-        }
-        else if(priceChange > 0){
-            harvestAdvice = "Harvest Soon";
-        }
-        else{
-            harvestAdvice = "Wait Few Days";
-        }
-
-        let outputHTML = `
-            <h3 class="text-2xl font-black mb-4">AI Recommendation for ${crop}</h3>
-            <p><b>📍 Location:</b> ${selectedLocation}</p>
-            <p><b>🌡 Temperature:</b> ${temperature}°C</p>
-            <p><b>💧 Humidity:</b> ${humidity}%</p>
-            <p><b>💰 Current Mandi Price:</b> ₹${currentPrice}</p>
-            <p><b>📊 Price Change:</b> ₹${priceChange}</p>
-            <hr class="my-4">
-            <p class="text-xl font-black text-green-700">
-              ✅ ${harvestAdvice}
-            </p>
-            <p><b>🏪 Best Market:</b> ${mandiData.mandi_name}</p>
-        `;
-
-        document.getElementById("output").innerHTML = outputHTML;
-        document.getElementById("output").classList.remove("hidden");
-
-    }catch(error){
-        console.error(error);
-        alert("Backend or Weather API error");
-    }
-}
-async function loadWeather(lat, lon){
-
-    try{
-
-        const response = await fetch(
-            `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`
-        );
-
-        const data = await response.json();
-
-        if(data.cod !== 200){
-            console.error("Weather API error:", data);
-            return;
-        }
-
-        const temperature = data.main.temp;
-        const humidity = data.main.humidity;
-        const windSpeed = data.wind.speed;
-
-        // 🔥 UPDATE ENVIRONMENT MODULE UI
-
-        // Temperature card
-        document.querySelectorAll("#module-env .text-4xl")[3]
-            .innerText = `${temperature}°C`;
-
-        // AQI placeholder (optional future API)
-        document.querySelectorAll("#module-env .text-4xl")[1]
-            .innerText = "Live";
-
-        // Rain probability estimate (from cloud cover)
-        const rainProb = data.clouds.all;
-
-        document.querySelectorAll("#module-env .text-4xl")[2]
-            .innerText = `${rainProb}%`;
-
-        // Add AI Insight update
-        const insightBox = document.querySelector("#module-env .bg-[#2E7D32] p");
-
-        insightBox.innerText =
-            `Current humidity is ${humidity}%. 
-            Temperature is ${temperature}°C.
-            Wind speed ${windSpeed} m/s.
-            These conditions affect drying and harvest timing.`;
-
-    }
-    catch(error){
-        console.error("Weather Fetch Failed:", error);
-    }
-}
 
     </script>
 </body>
