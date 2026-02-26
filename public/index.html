@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriChain — AI Farm-to-Market Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FCFDFB;
+            scroll-behavior: smooth;
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
+        }
+
+        .dropdown-animate {
+            transform-origin: top right;
+            transition: all 0.2s ease-out;
+        }
+
+        .ai-module-active {
+            border-color: #2E7D32;
+            background-color: #F1F8F1;
+        }
+
+        .step-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 100%;
+            height: 2px;
+            background: #E5E7EB;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <!-- NAVIGATION -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-[#2E7D32] p-1.5 rounded-xl shadow-lg">
+                        <i data-lucide="sprout" class="text-white w-6 h-6"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tight text-[#2E7D32]">AgriChain 🌾</span>
+                </div>
+                
+                <!-- Desktop Nav -->
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="#home" class="text-gray-600 font-bold hover:text-[#2E7D32]" data-key="nav-home">Home</a>
+                    <a href="#how-it-works" class="text-gray-600 font-bold hover:text-[#2E7D32]" data-key="nav-how">How It Works</a>
+                    <a href="#features" class="text-gray-600 font-bold hover:text-[#2E7D32]" data-key="nav-features">Features</a>
+                    <a href="#mandi" class="text-gray-600 font-bold hover:text-[#2E7D32]" data-key="nav-mandi">Mandi Prices</a>
+                    <a href="#about" class="text-gray-600 font-bold hover:text-[#2E7D32]" data-key="nav-about">About</a>
+                    
+                    <!-- AgriChainAI Special Dropdown -->
+                    <div class="relative group">
+                        <button onclick="toggleAIDropdown()" class="bg-[#2E7D32] text-white px-5 py-2.5 rounded-xl font-black flex items-center gap-2 shadow-lg shadow-green-100 hover:bg-[#1B5E20] transition-all">
+                            AgriChainAI <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                        <div id="ai-dropdown" class="hidden absolute right-0 mt-3 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 p-3 dropdown-animate">
+                            <button onclick="openAIModule('env')" class="w-full text-left p-4 hover:bg-gray-50 rounded-xl transition-colors group">
+                                <p class="font-black text-gray-900 text-sm group-hover:text-[#2E7D32]">Environmental Prediction</p>
+                                <p class="text-xs text-gray-500 font-bold">Weather, Soil & AQI Dashboard</p>
+                            </button>
+                            <button onclick="openAIModule('mandi')" class="w-full text-left p-4 hover:bg-gray-50 rounded-xl transition-colors group">
+                                <p class="font-black text-gray-900 text-sm group-hover:text-[#2E7D32]">Mandi Prices Module</p>
+                                <p class="text-xs text-gray-500 font-bold">Live Rates & Net Profit Analysis</p>
+                            </button>
+                            <button onclick="openAIModule('pred')" class="w-full text-left p-4 hover:bg-gray-50 rounded-xl transition-colors group">
+                                <p class="font-black text-gray-900 text-sm group-hover:text-[#2E7D32]">Farmer Prediction Module</p>
+                                <p class="text-xs text-gray-500 font-bold">Harvest Window & Confidence Score</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center bg-gray-100 rounded-xl p-1 border border-gray-200 ml-4">
+                        <button onclick="setLanguage('en')" id="l-en" class="px-2 py-1 rounded-lg text-[10px] font-black bg-white shadow-sm text-[#2E7D32]">EN</button>
+                        <button onclick="setLanguage('hi')" id="l-hi" class="px-2 py-1 rounded-lg text-[10px] font-black text-gray-500">HI</button>
+                        <button onclick="setLanguage('mr')" id="l-mr" class="px-2 py-1 rounded-lg text-[10px] font-black text-gray-500">MR</button>
+                    </div>
+                </div>
+
+                <div class="lg:hidden">
+                    <button onclick="toggleMobileMenu()" class="p-2 text-gray-600"><i data-lucide="menu" class="w-8 h-8"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative pt-20 pb-32 overflow-hidden bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-16">
+            <div class="flex-1 space-y-10 text-center lg:text-left">
+                <h1 class="text-6xl lg:text-8xl font-black text-gray-900 leading-[1.1] tracking-tighter" data-key="hero-title">
+                    Harvest Smarter. <br><span class="text-[#2E7D32]">Sell Smarter.</span>
+                </h1>
+                <p class="text-xl text-gray-600 font-bold max-w-xl mx-auto lg:mx-0" data-key="hero-sub">
+                    AI-powered farm intelligence using weather, soil, and market data for India's 140 million farmers.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <button class="bg-[#2E7D32] text-white px-10 py-5 rounded-2xl font-black text-xl shadow-2xl shadow-green-100 hover:scale-105 transition-all">
+                        Get AI Recommendation
+                    </button>
+                    <button onclick="document.getElementById('ai-showcase').scrollIntoView()" class="bg-white border-2 border-gray-100 text-gray-800 px-10 py-5 rounded-2xl font-black text-xl hover:border-[#2E7D32] transition-all">
+                        Explore AgriChainAI
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 relative">
+                <div class="bg-gray-100 w-full h-[500px] rounded-[3rem] overflow-hidden relative shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1744230673231-865d54a0aba4?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGFpJTIwYW5kJTIwYnVzaW5lc3N8ZW58MHx8MHx8fDA%3D" class="w-full h-full object-cover grayscale-[0.2]" alt="Farmer">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#2E7D32]/40 to-transparent"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS (6 STEPS) -->
+    <section id="how-it-works" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl lg:text-5xl font-black text-gray-900 mb-4" data-key="how-title">How AgriChain Works</h2>
+                <p class="text-gray-500 font-bold max-w-2xl mx-auto">Our transparent 6-step intelligence pipeline ensures you make the most profitable decisions for every harvest cycle.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="steps-grid">
+                <!-- Step 1 -->
+                <div class="bg-white p-10 rounded-[2.5rem] card-shadow border border-gray-100 space-y-4 hover:border-[#2E7D32] transition-colors">
+                    <div class="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center text-[#2E7D32]">
+                        <i data-lucide="map-pin" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-xs font-black text-[#F9A825] uppercase tracking-widest">Step 1</p>
+                    <h3 class="text-2xl font-black">Enter Crop & Location</h3>
+                    <p class="text-gray-500 font-bold text-sm">Tell us what you're growing and where. We support over 40 Indian regional crops.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="bg-white p-10 rounded-[2.5rem] card-shadow border border-gray-100 space-y-4 hover:border-[#2E7D32] transition-colors">
+                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600">
+                        <i data-lucide="cloud-sun" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-xs font-black text-[#F9A825] uppercase tracking-widest">Step 2</p>
+                    <h3 class="text-2xl font-black">Environmental Analysis</h3>
+                    <p class="text-gray-500 font-bold text-sm">Real-time monitoring of soil moisture, AQI, and detailed 5-day weather patterns.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="bg-white p-10 rounded-[2.5rem] card-shadow border border-gray-100 space-y-4 hover:border-[#2E7D32] transition-colors">
+                    <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-600">
+                        <i data-lucide="trending-up" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-xs font-black text-[#F9A825] uppercase tracking-widest">Step 3</p>
+                    <h3 class="text-2xl font-black">Mandi Intelligence</h3>
+                    <p class="text-gray-500 font-bold text-sm">Historical price analysis and current live rates across nearby mandis.</p>
+                </div>
+                <!-- Step 4 -->
+                <div class="bg-white p-10 rounded-[2.5rem] card-shadow border border-gray-100 space-y-4 hover:border-[#2E7D32] transition-colors">
+                    <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600">
+                        <i data-lucide="calendar" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-xs font-black text-[#F9A825] uppercase tracking-widest">Step 4</p>
+                    <h3 class="text-2xl font-black">AI Harvest Timing</h3>
+                    <p class="text-gray-500 font-bold text-sm">We predict the exact 48-hour window where your crop reaches peak market value.</p>
+                </div>
+                <!-- Step 5 -->
+                <div class="bg-white p-10 rounded-[2.5rem] card-shadow border border-gray-100 space-y-4 hover:border-[#2E7D32] transition-colors">
+                    <div class="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center text-red-600">
+                        <i data-lucide="alert-triangle" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-xs font-black text-[#F9A825] uppercase tracking-widest">Step 5</p>
+                    <h3 class="text-2xl font-black">Risk Assessment</h3>
+                    <p class="text-gray-500 font-bold text-sm">Calculating spoilage risks and transit delays based on humidity and logistics.</p>
+                </div>
+                <!-- Step 6 -->
+                <div class="bg-white p-10 rounded-[2.5rem] card-shadow border border-gray-100 space-y-4 hover:border-[#2E7D32] transition-colors">
+                    <div class="w-16 h-16 bg-yellow-50 rounded-2xl flex items-center justify-center text-[#F9A825]">
+                        <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-xs font-black text-[#F9A825] uppercase tracking-widest">Step 6</p>
+                    <h3 class="text-2xl font-black">Final Recommendations</h3>
+                    <p class="text-gray-500 font-bold text-sm">Specific mandi selection, preservation methods, and profit estimation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AGRICHAI AI MODULE SHOWCASE -->
+    <section id="ai-showcase" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl lg:text-5xl font-black text-gray-900 mb-4">AgriChainAI Feature Showcase</h2>
+                <div class="flex justify-center gap-2 mt-8">
+                    <button onclick="openAIModule('env')" id="tab-env" class="px-8 py-3 rounded-xl font-black text-sm uppercase transition-all ai-module-active border-2 border-transparent">🌦 Environmental</button>
+                    <button onclick="openAIModule('mandi')" id="tab-mandi" class="px-8 py-3 rounded-xl font-black text-sm uppercase transition-all border-2 border-gray-100 text-gray-400">💰 Mandi Analytics</button>
+                    <button onclick="openAIModule('pred')" id="tab-pred" class="px-8 py-3 rounded-xl font-black text-sm uppercase transition-all border-2 border-gray-100 text-gray-400">🤖 AI Prediction</button>
+                </div>
+            </div>
+
+            <!-- MODULE CONTENT CONTAINER -->
+            <div class="bg-gray-50 rounded-[3rem] p-8 lg:p-12 min-h-[500px] border border-gray-100 card-shadow">
+                
+                <!-- Environmental Module -->
+                <div id="module-env" class="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-6 rounded-3xl border border-gray-200">
+                            <p class="text-xs font-black text-gray-400 uppercase mb-2">Soil Moisture</p>
+                            <p class="text-4xl font-black text-[#2E7D32]">14.2%</p>
+                            <p class="text-xs font-bold text-green-600 mt-1 uppercase">Optimal Range</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl border border-gray-200">
+                            <p class="text-xs font-black text-gray-400 uppercase mb-2">Air Quality (AQI)</p>
+                            <p class="text-4xl font-black text-gray-800">42</p>
+                            <p class="text-xs font-bold text-green-600 mt-1 uppercase">Good Quality</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl border border-gray-200">
+                            <p class="text-xs font-black text-gray-400 uppercase mb-2">5-Day Rain Prob</p>
+                            <p class="text-4xl font-black text-blue-600">5%</p>
+                            <p class="text-xs font-bold text-gray-500 mt-1 uppercase">Low Risk</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl border border-gray-200">
+                            <p class="text-xs font-black text-gray-400 uppercase mb-2">Temperature</p>
+                            <p class="text-4xl font-black text-[#F9A825]">31°C</p>
+                            <p class="text-xs font-bold text-gray-500 mt-1 uppercase">Peak 3:00 PM</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2 bg-white p-8 rounded-[2rem] border border-gray-200 h-64 flex flex-col justify-center">
+                            <h4 class="font-black text-gray-900 mb-6">Humidity Trend & Forecast</h4>
+                            <div class="flex items-end justify-between h-32 gap-2">
+                                <div class="w-full bg-gray-100 rounded-t-lg h-[40%]"></div>
+                                <div class="w-full bg-gray-100 rounded-t-lg h-[60%]"></div>
+                                <div class="w-full bg-[#2E7D32] rounded-t-lg h-[80%] relative group">
+                                    <div class="hidden group-hover:block absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] px-2 py-1 rounded">Peak</div>
+                                </div>
+                                <div class="w-full bg-gray-100 rounded-t-lg h-[70%]"></div>
+                                <div class="w-full bg-gray-100 rounded-t-lg h-[45%]"></div>
+                            </div>
+                        </div>
+                        <div class="bg-[#2E7D32] p-8 rounded-[2rem] text-white flex flex-col justify-between">
+                            <i data-lucide="info" class="w-10 h-10 mb-4 opacity-50"></i>
+                            <h4 class="text-xl font-black">AI Insight</h4>
+                            <p class="text-sm font-medium opacity-80 leading-relaxed">Lower humidity levels in the coming 72 hours are ideal for harvesting Wheat. Avoid storage in open fields after 4:00 PM.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mandi Module (Hidden by default) -->
+                <div id="module-mandi" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="flex justify-between items-center bg-white p-6 rounded-3xl border border-gray-200">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#2E7D32]"><i data-lucide="map"></i></div>
+                            <div>
+                                <h4 class="font-black text-lg">Solapur Mandi</h4>
+                                <p class="text-xs font-bold text-gray-400">BEST MARKET MATCH ⭐</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-3xl font-black text-gray-900">₹2,450</p>
+                            <p class="text-xs font-bold text-green-600 uppercase">+₹120 YESTERDAY</p>
+                        </div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="bg-white p-6 rounded-3xl border border-gray-200">
+                            <p class="text-xs font-black text-gray-400 uppercase mb-1">Distance</p>
+                            <p class="text-2xl font-black">22km</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-3xl border border-gray-200">
+                            <p class="text-xs font-black text-gray-400 uppercase mb-1">Transport Cost</p>
+                            <p class="text-2xl font-black text-red-600">₹450 <span class="text-sm">/t</span></p>
+                        </div>
+                        <div class="bg-[#F9A825] p-6 rounded-3xl text-white">
+                            <p class="text-xs font-black uppercase mb-1">Net Profit Estimate</p>
+                            <p class="text-3xl font-black">₹92,400</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-8 rounded-[2rem] border border-gray-200">
+                        <h4 class="font-black mb-4">Price Trend (Last 7 Days)</h4>
+                        <div class="w-full h-32 flex items-center justify-center text-gray-300 font-bold border-2 border-dashed border-gray-100 rounded-2xl italic">
+                           Trend graph visualization loading...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prediction Module (Hidden by default) -->
+                <div id="module-pred" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div class="text-center p-10 bg-white rounded-[3rem] border-4 border-[#2E7D32]/10">
+                        <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">AI Prediction</p>
+                        <h3 class="text-5xl lg:text-7xl font-black text-[#2E7D32]">4–5 March</h3>
+                        <p class="text-xl font-bold text-gray-600 mt-4">Optimum Harvest Window</p>
+                        <div class="flex justify-center mt-8">
+                            <div class="px-6 py-2 bg-green-50 text-[#2E7D32] rounded-full font-black text-sm border border-green-100">88% Confidence Score</div>
+                        </div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-3xl border border-gray-200">
+                            <h4 class="font-black text-gray-900 mb-6 flex items-center gap-2"><i data-lucide="info" class="w-4 h-4 text-[#F9A825]"></i> Why this prediction?</h4>
+                            <ul class="space-y-4">
+                                <li class="flex justify-between font-bold text-sm text-gray-600"><span>Historical Price Spike</span> <span class="text-[#2E7D32]">+8.2%</span></li>
+                                <li class="flex justify-between font-bold text-sm text-gray-600"><span>Dry Weather Window</span> <span class="text-[#2E7D32]">Confirmed</span></li>
+                                <li class="flex justify-between font-bold text-sm text-gray-600"><span>Crop Maturity Match</span> <span class="text-[#2E7D32]">94%</span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-8 rounded-3xl border border-gray-200">
+                            <h4 class="font-black text-gray-900 mb-6 flex items-center gap-2"><i data-lucide="heart" class="w-4 h-4 text-red-500"></i> Soil Health Analysis</h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center"><span class="font-bold text-sm text-gray-500 uppercase">Nitrogen</span> <div class="w-1/2 h-2 bg-gray-100 rounded-full"><div class="w-[70%] h-full bg-[#2E7D32] rounded-full"></div></div></div>
+                                <div class="flex justify-between items-center"><span class="font-bold text-sm text-gray-500 uppercase">pH Level</span> <div class="w-1/2 h-2 bg-gray-100 rounded-full"><div class="w-[45%] h-full bg-[#F9A825] rounded-full"></div></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- POST HARVEST INTELLIGENCE -->
+    <section class="py-24 bg-[#6D4C41] text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row gap-20 items-center">
+            <div class="flex-1 space-y-8 text-center lg:text-left">
+                <h2 class="text-4xl lg:text-6xl font-black leading-tight">Post-Harvest <br><span class="text-[#F9A825]">Intelligence</span></h2>
+                <p class="text-xl opacity-80 font-medium">Protect your hard-earned crop from spoilage with AI-driven preservation strategies.</p>
+                
+                <div class="grid grid-cols-2 gap-4 pt-8">
+                   <div class="flex flex-col items-center lg:items-start">
+                        <i data-lucide="thermometer" class="text-[#F9A825] w-8 h-8 mb-4"></i>
+                        <p class="font-black text-lg leading-tight">Humidity<br>Alerts</p>
+                   </div>
+                   <div class="flex flex-col items-center lg:items-start">
+                        <i data-lucide="package" class="text-[#F9A825] w-8 h-8 mb-4"></i>
+                        <p class="font-black text-lg leading-tight">Storage<br>Solutions</p>
+                   </div>
+                </div>
+            </div>
+
+            <div class="flex-1 w-full max-w-lg">
+                <div class="bg-white text-gray-900 rounded-[3rem] p-10 card-shadow">
+                    <div class="flex justify-between items-center mb-10 pb-6 border-b border-gray-100">
+                        <h4 class="text-xl font-black uppercase tracking-tight">Spoilage Risk</h4>
+                        <span class="bg-orange-100 text-[#F9A825] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">Medium Risk</span>
+                    </div>
+
+                    <div class="flex justify-center mb-10">
+                        <div class="text-center">
+                            <p class="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Safe Storage Prediction</p>
+                            <p class="text-5xl font-black text-gray-900">12 Days</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="p-5 rounded-2xl border border-gray-100 bg-gray-50 flex justify-between items-center group hover:border-[#2E7D32] transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#2E7D32] shadow-sm"><i data-lucide="layers" class="w-5 h-5"></i></div>
+                                <div><p class="font-black text-sm">Tarpaulin Cover</p><div class="flex text-[#F9A825] text-xs">★★★★★</div></div>
+                            </div>
+                            <span class="font-black text-[#2E7D32]">₹</span>
+                        </div>
+                        <div class="p-5 rounded-2xl border border-gray-100 bg-gray-50 flex justify-between items-center group hover:border-[#2E7D32] transition-colors">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-blue-600 shadow-sm"><i data-lucide="truck" class="w-5 h-5"></i></div>
+                                <div><p class="font-black text-sm">Cold Chain Transit</p><div class="flex text-[#F9A825] text-xs">★★★★</div></div>
+                            </div>
+                            <span class="font-black text-[#2E7D32]">₹₹₹</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI TRANSPARENCY -->
+    <section class="py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center space-y-8">
+                <h2 class="text-4xl lg:text-5xl font-black text-gray-900">Why You Can Trust AgriChain AI</h2>
+                <p class="text-lg text-gray-500 font-bold leading-relaxed">We don't believe in "Black Box" AI. Every recommendation is backed by a minimum of 5 years of historical price trends and verified government weather stations.</p>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-10">
+                    <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                        <p class="text-3xl font-black text-[#2E7D32]">94%</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Accuracy</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                        <p class="text-3xl font-black text-[#2E7D32]">40+</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Crops</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                        <p class="text-3xl font-black text-[#2E7D32]">12M</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Data Points</p>
+                    </div>
+                    <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+                        <p class="text-3xl font-black text-[#2E7D32]">2.4K</p>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-gray-400 mt-1">Mandis</p>
+                    </div>
+                </div>
+
+                <div class="mt-20 p-8 bg-green-50 rounded-[3rem] border border-green-100 flex flex-col md:flex-row items-center gap-8 text-left">
+                    <div class="w-20 h-20 bg-white rounded-[2rem] flex items-center justify-center text-[#2E7D32] shadow-sm flex-shrink-0">
+                        <i data-lucide="shield-check" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-[#2E7D32]">Farmer Data Privacy</h4>
+                        <p class="text-sm font-bold text-green-800/70">Your field data is encrypted and never sold. We only use anonymized trends to improve predictions for the community.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-32 bg-[#2E7D32] relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 text-center text-white relative z-10">
+            <h2 class="text-5xl lg:text-7xl font-black mb-10 tracking-tighter">Stop Guessing. <br><span class="text-[#F9A825]">Start Predicting.</span></h2>
+            <p class="text-xl md:text-2xl mb-12 opacity-80 font-medium">Empower your farming business with data that makes a difference.</p>
+            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                <button class="bg-white text-[#2E7D32] px-12 py-6 rounded-2xl font-black text-xl hover:scale-105 transition-all shadow-2xl">Get Started Free</button>
+                <button class="bg-transparent border-2 border-white/50 text-white px-12 py-6 rounded-2xl font-black text-xl hover:bg-white/10 transition-all">Request Investor Deck</button>
+            </div>
+        </div>
+        <div class="absolute -bottom-20 -right-20 w-96 h-96 bg-[#F9A825] rounded-full opacity-20 blur-3xl"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white py-20 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 mb-20">
+                <div class="col-span-2 space-y-6">
+                    <div class="flex items-center gap-2">
+                        <div class="bg-[#2E7D32] p-1 rounded-lg"><i data-lucide="sprout" class="text-white w-5 h-5"></i></div>
+                        <span class="text-2xl font-black text-[#2E7D32]">AgriChain</span>
+                    </div>
+                    <p class="text-gray-500 font-bold max-w-xs">Building the intelligence layer for India's food supply chain.</p>
+                </div>
+                <div class="space-y-4">
+                    <p class="font-black text-sm uppercase tracking-widest text-gray-400">Platform</p>
+                    <a href="#" class="block font-bold text-gray-600 hover:text-[#2E7D32]">AgriChainAI</a>
+                    <a href="#" class="block font-bold text-gray-600 hover:text-[#2E7D32]">Mandi Pricing</a>
+                    <a href="#" class="block font-bold text-gray-600 hover:text-[#2E7D32]">Storage Solutions</a>
+                </div>
+                <div class="space-y-4">
+                    <p class="font-black text-sm uppercase tracking-widest text-gray-400">Company</p>
+                    <a href="#" class="block font-bold text-gray-600 hover:text-[#2E7D32]">About Us</a>
+                    <a href="#" class="block font-bold text-gray-600 hover:text-[#2E7D32]">Impact</a>
+                    <a href="#" class="block font-bold text-gray-600 hover:text-[#2E7D32]">Careers</a>
+                </div>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-gray-100 gap-6">
+                <p class="text-gray-400 text-sm font-bold">© 2024 AgriChain India. All Rights Reserved.</p>
+                <div class="flex gap-6">
+                    <div class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:text-[#2E7D32] transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></div>
+                    <div class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center text-gray-400 hover:text-[#2E7D32] transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- TRANSLATIONS ---
+        const translations = {
+            en: {
+                "nav-home": "Home",
+                "nav-how": "How It Works",
+                "nav-features": "Features",
+                "nav-mandi": "Mandi Prices",
+                "nav-about": "About",
+                "hero-title": "Harvest Smarter. <br><span class='text-[#2E7D32]'>Sell Smarter.</span>",
+                "hero-sub": "AI-powered farm intelligence using weather, soil, and market data for India's 140 million farmers.",
+                "how-title": "How AgriChain Works"
+            },
+            hi: {
+                "nav-home": "होम",
+                "nav-how": "यह कैसे काम करता है",
+                "nav-features": "विशेषताएं",
+                "nav-mandi": "मंडी भाव",
+                "nav-about": "हमारे बारे में",
+                "hero-title": "बेहतर फसल। <br><span class='text-[#2E7D32]'>बेहतर दाम।</span>",
+                "hero-sub": "भारत के 14 करोड़ किसानों के लिए मौसम, मिट्टी और बाजार डेटा का उपयोग करने वाली एआई-संचालित कृषि खुफिया जानकारी।",
+                "how-title": "AgriChain कैसे काम करता है"
+            },
+            mr: {
+                "nav-home": "मुख्यपृष्ठ",
+                "nav-how": "कसे कार्य करते",
+                "nav-features": "वैशिष्ट्ये",
+                "nav-mandi": "मंडी भाव",
+                "nav-about": "आमच्याबद्दल",
+                "hero-title": "स्मार्ट कापणी. <br><span class='text-[#2E7D32]'>स्मार्ट विक्री.</span>",
+                "hero-sub": "भारतातील १४० दशलक्ष शेतकऱ्यांसाठी हवामान, माती आणि बाजार डेटा वापरून तयार केलेली एआय-शक्तीवर आधारित शेती बुद्धिमत्ता.",
+                "how-title": "AgriChain कसे काम करते"
+            }
+        };
+
+        // --- APP STATE ---
+        let currentLang = 'en';
+
+        // --- UI FUNCTIONS ---
+        function toggleAIDropdown() {
+            const dropdown = document.getElementById('ai-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(e) {
+            const dropdown = document.getElementById('ai-dropdown');
+            if (!dropdown.contains(e.target) && !e.target.closest('button')) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
+        function openAIModule(moduleId) {
+            // Update Tabs
+            const tabs = ['env', 'mandi', 'pred'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                btn.classList.remove('ai-module-active', 'border-[#2E7D32]', 'bg-[#F1F8F1]', 'text-[#2E7D32]');
+                btn.classList.add('border-gray-100', 'text-gray-400');
+            });
+
+            const activeBtn = document.getElementById(`tab-${moduleId}`);
+            activeBtn.classList.add('ai-module-active', 'border-[#2E7D32]', 'bg-[#F1F8F1]', 'text-[#2E7D32]');
+            activeBtn.classList.remove('text-gray-400');
+
+            // Update Modules
+            tabs.forEach(t => {
+                document.getElementById(`module-${t}`).classList.add('hidden');
+            });
+            document.getElementById(`module-${moduleId}`).classList.remove('hidden');
+
+            // Hide dropdown if open
+            document.getElementById('ai-dropdown').classList.add('hidden');
+            
+            // Re-init icons for new content
+            lucide.createIcons();
+        }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            // Buttons UI Update
+            ['en', 'hi', 'mr'].forEach(l => {
+                const btn = document.getElementById(`l-${l}`);
+                if (l === lang) {
+                    btn.classList.add('bg-white', 'shadow-sm', 'text-[#2E7D32]');
+                    btn.classList.remove('text-gray-500');
+                } else {
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-[#2E7D32]');
+                    btn.classList.add('text-gray-500');
+                }
+            });
+
+            // Update content elements
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (t[key]) el.innerHTML = t[key];
+            });
+
+            lucide.createIcons();
+        }
+
+        function toggleMobileMenu() {
+            // For a production app, we'd expand a mobile sidebar here.
+            console.log("Mobile menu toggled");
+        }
+
+        // Initializer
+        window.onload = () => {
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
