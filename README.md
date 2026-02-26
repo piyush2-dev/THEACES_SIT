@@ -1,4 +1,4 @@
-# 🌾 AgriChain — AI Farm-to-Market Intelligence Platform
+#  AgriChain — AI Farm-to-Market Intelligence Platform
 
 AgriChain is an AI-powered farm intelligence platform designed to help Indian farmers make smarter harvesting, selling, and storage decisions using environmental data, mandi price analytics, and predictive modeling.
 
@@ -6,7 +6,7 @@ This project demonstrates a modern, responsive, multilingual web interface for a
 
 ---
 
-## 🚀 Project Vision
+##  Project Vision
 
 India loses up to 40% of agricultural produce due to:
 
@@ -25,15 +25,15 @@ The system is designed specifically for:
 
 ---
 
-## 🧠 Core Features Implemented
+##  Core Features Implemented
 
 ### 1️⃣ AI Module System (Tabbed Interface)
 
 Three intelligent modules:
 
-• 🌦 Environmental Prediction Module  
-• 💰 Mandi Analytics Module  
-• 🤖 AI Harvest Prediction Module  
+•  Environmental Prediction Module  
+•  Mandi Analytics Module  
+•  AI Harvest Prediction Module  
 
 
 
@@ -122,7 +122,7 @@ Frontend → Backend API → AI Engine → Database → External Data APIs
 
 ---
 
-# 💻 Frontend
+#  Frontend
 
 Built using:
 
@@ -142,7 +142,7 @@ Features:
 
 ---
 
-# ⚙ Backend
+#  Backend
 
 Recommended Backend Stack:
 
@@ -171,7 +171,7 @@ Backend Responsibilities:
 
 ---
 
-# 🧠 AI & Analytics Layer
+#  AI & Analytics Layer
 
 Modules:
 
@@ -241,7 +241,7 @@ Purpose:
 
 ---
 
-# 🔐 Authentication System
+#  Authentication System
 
 Authentication Strategy:
 
@@ -266,7 +266,7 @@ Security Features:
 
 ---
 
-# 🌐 External API Integrations
+#  External API Integrations
 
 Planned Integrations:
 
@@ -278,7 +278,7 @@ Planned Integrations:
 ---
 
 
-# 📊 Scalability Design
+#  Scalability Design
 
 - Stateless backend API
 - Cloud database support
@@ -288,7 +288,7 @@ Planned Integrations:
 
 ---
 
-# 📱 User-Centric System Design
+#  User-Centric System Design
 
 Built for:
 
@@ -301,7 +301,7 @@ Built for:
 
 ---
 
-# 🎯 Impact
+#  Impact
 
 AgriChain aims to:
 
