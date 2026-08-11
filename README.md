@@ -1,4 +1,4 @@
-#  AgriChain — AI Farm-to-Market Intelligence Platform
+#  AgriChain : AI Farm-to-Market Intelligence Platform
 
 AgriChain is an AI-powered farm intelligence platform designed to help Indian farmers make smarter harvesting, selling, and storage decisions using environmental data, mandi price analytics, and predictive modeling.
 
@@ -27,7 +27,7 @@ The system is designed specifically for:
 
 ##  Core Features Implemented
 
-### 1️⃣ AI Module System (Tabbed Interface)
+### AI Module System (Tabbed Interface)
 
 Three intelligent modules:
 
@@ -39,7 +39,7 @@ Three intelligent modules:
 
 ---
 
-### 2️⃣ Environmental Intelligence Dashboard
+###  Environmental Intelligence Dashboard
 
 Displays:
 
@@ -53,7 +53,7 @@ Displays:
 
 ---
 
-### 3️⃣ Mandi Intelligence Module
+### Mandi Intelligence Module
 
 Includes:
 
@@ -66,7 +66,7 @@ Includes:
 
 ---
 
-### 4️⃣ AI Harvest Window Prediction
+### AI Harvest Window Prediction
 
 Provides:
 
@@ -79,7 +79,7 @@ Provides:
 
 ---
 
-### 5️⃣ Post-Harvest Intelligence System
+### Post-Harvest Intelligence System
 
 Includes:
 
@@ -92,7 +92,7 @@ Includes:
 
 ---
 
-### 6️⃣ Multilingual Support
+### Multilingual Support
 
 Languages available:
 
@@ -103,7 +103,7 @@ Languages available:
 
 ---
 
-### 7️⃣ AI Transparency Section
+### AI Transparency Section
 
 Displays:
 
@@ -114,7 +114,7 @@ Displays:
 - Farmer Data Privacy Statement
 
 ---
-# 🏗 System Architecture
+# System Architecture
 
 AgriChain follows a modern full-stack architecture:
 
@@ -188,7 +188,7 @@ Future:
 
 ---
 
-# 🗄 Database Layer
+# Database Layer
 
 Recommended Database:
 
